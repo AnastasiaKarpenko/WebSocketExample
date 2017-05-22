@@ -1,0 +1,87 @@
+<omiEnvelope ttl="10" version="1.0" xmlns="http://www.opengroup.org/xsd/omi/1.0/">
+    <response>
+        <result msgformat="odf">
+            <return returnCode="200">
+            </return>
+            <msg>
+                <Objects xmlns="http://www.opengroup.org/xsd/odf/1.0/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:odf="http://www.opengroup.org/xsd/odf/1.0/">
+                    <Object>
+                        <id>ParkingService</id>
+                        <Object type="list">
+                            <id>ParkingLots</id>
+                            <Object type="schema:ParkingFacility">
+                                <id>NorthernParkingLot</id>
+                                <InfoItem name="MaxParkingHours">
+                                    <value unixTime="1495014321" dateTime="2017-05-17T12:45:21.276+03:00">20</value>
+                                </InfoItem>
+                                <InfoItem name="Owner">
+                                    <value unixTime="1495014321" dateTime="2017-05-17T12:45:21.276+03:00">Aalto University</value>
+                                </InfoItem>
+                                <Object type="schema:GeoCoordinates">
+                                    <id>geo</id>
+                                    <InfoItem name="longitude">
+                                        <value unixTime="1495014321" type="xs:double" dateTime="2017-05-17T12:45:21.276+03:00">24.8213216</value>
+                                    </InfoItem>
+                                    <InfoItem name="latitude">
+                                        <value unixTime="1495014321" type="xs:double" dateTime="2017-05-17T12:45:21.276+03:00">60.187556</value>
+                                    </InfoItem>
+                                </Object>
+                                <Object type="schema:OpeningHoursSpecification">
+                                    <id>openingHoursSpecification</id>
+                                    <InfoItem name="closes">
+                                        <value unixTime="1495014321" type="schema:Time" dateTime="2017-05-17T12:45:21.276+03:00">24:00</value>
+                                    </InfoItem>
+                                    <InfoItem name="opens">
+                                        <value unixTime="1495014321" type="schema:Time" dateTime="2017-05-17T12:45:21.276+03:00">00:00</value>
+                                    </InfoItem>
+                                </Object>
+                                <Object type="list">
+                                    <id>SpotTypes</id>
+                                    <Object type="ParkingSpotType">
+                                        <id>ElectricVehicle</id>
+                                        <InfoItem name="MaxHeight">
+                                            <value unixTime="1495014321" type="xs:float" dateTime="2017-05-17T12:45:21.276+03:00">2.5</value>
+                                        </InfoItem>
+                                        <InfoItem name="MaxWidth">
+                                            <value unixTime="1495014321" type="xs:float" dateTime="2017-05-17T12:45:21.276+03:00">2.5</value>
+                                        </InfoItem>
+                                        <InfoItem name="NumberOfSpots">
+                                            <value unixTime="1495014321" type="xs:int" dateTime="2017-05-17T12:45:21.276+03:00">2</value>
+                                        </InfoItem>
+                                        <InfoItem name="HourlyPrice">
+                                            <value unixTime="1495014321" type="xs:int" dateTime="2017-05-17T12:45:21.276+03:00">2</value>
+                                        </InfoItem>
+                                        <InfoItem name="NumberOfSpotsAvailable">
+                                            <value unixTime="1495014321" type="xs:int" dateTime="2017-05-17T12:45:21.276+03:00">2</value>
+                                        </InfoItem>
+                                        <Object type="list">
+                                            <id>Spots</id>
+                                            <Object type="ParkingSpot">
+                                                <id>EVSpot2</id>
+                                                <InfoItem name="Available">
+                                                    <value unixTime="1495014321" dateTime="2017-05-17T12:45:21.276+03:00">TRUE</value>
+                                                </InfoItem>
+                                                <InfoItem name="User">
+                                                    <value unixTime="1495014321" dateTime="2017-05-17T12:45:21.276+03:00">NONE</value>
+                                                </InfoItem>
+                                            </Object>
+                                            <Object type="ParkingSpot">
+                                                <id>EVSpot1</id>
+                                                <InfoItem name="Available">
+                                                    <value unixTime="1495014321" dateTime="2017-05-17T12:45:21.276+03:00">TRUE</value>
+                                                </InfoItem>
+                                                <InfoItem name="User">
+                                                    <value unixTime="1495014321" dateTime="2017-05-17T12:45:21.276+03:00">NONE</value>
+                                                </InfoItem>
+                                            </Object>
+                                        </Object>
+                                    </Object>
+                                </Object>
+                            </Object>
+                        </Object>
+                    </Object>
+                </Objects>
+            </msg>
+        </result>
+    </response>
+</omiEnvelope>
