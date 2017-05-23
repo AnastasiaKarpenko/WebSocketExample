@@ -1,12 +1,14 @@
 package ru.kvs.websocketexample;
 
+import java.util.List;
+
 public class ParkingLot {
     private String id;
     private String maxParkingHours;
     private String owner;
     private GeoCoordinates position;
     private OpeningHours openingHours;
-    private EvSection evSection;
+    private List<ParkingSection> mParkingSectionList;
 
 
     public String getId() {
@@ -49,11 +51,15 @@ public class ParkingLot {
         this.openingHours = openingHours;
     }
 
-    public EvSection getEvSection() {
-        return evSection;
+    public List<ParkingSection> getParkingSectionList() {
+        return mParkingSectionList;
     }
 
-    public void setEvSection(EvSection evSection) {
-        this.evSection = evSection;
+    public void setParkingSectionList(List<ParkingSection> parkingSectionList) {
+        mParkingSectionList = parkingSectionList;
+    }
+
+    public void addParkingSection(ParkingSection parkingSection) {
+        mParkingSectionList.add(parkingSection);
     }
 }

@@ -126,7 +126,7 @@ public class XmlParser3 {
                         OpeningHours openingHours = parseOpeningHoursSpecification(element);
                         parkingLot.setOpeningHours(openingHours);
                     } else if (element.getAttribute("type").equals("list")) {
-                        parseParkingSpotTypesList(element);
+                        parkingLot.setParkingSectionList(parseParkingSectionList(element));
                     }
                 }
             }
@@ -190,7 +190,8 @@ public class XmlParser3 {
         return openingHours;
     }
 
-    private void parseParkingSpotTypesList(Element objectElement) {
+    private List<ParkingSection> parseParkingSectionList(Element objectElement) {
+        List<ParkingSection> parkingSections = new ArrayList<>();
         NodeList nodes = objectElement.getChildNodes();
 
         for (int i = 0; i < nodes.getLength(); i++) {
@@ -200,13 +201,57 @@ public class XmlParser3 {
                 Element nodeElement = (Element) node;
 
                 if (!nodeElement.getTagName().equals("id")) {
-                    parseSpotTypeSection(nodeElement);
+                    ParkingSection parkingSection = parseParkingSection(nodeElement);
+                    parkingSections.add(parkingSection);
                 }
             }
         }
+        return parkingSections;
     }
 
-    private void parseSpotTypeSection(Element nodeElement) {
+    private ParkingSection parseParkingSection(Element nodeElement) {
+
+        ParkingSection parkingSection = new ParkingSection();
+
+
+        NodeList nodes = nodeElement.getChildNodes();
+        for (int i = 0; i < nodes.getLength(); i++) { u
+            Node node = nodes.item(i);
+
+            if (node.getNodeType() == Node.ELEMENT_NODE) {
+                Element element = (Element) node;
+
+                if (element.getTagName().equals("id")) {
+                    String id = element.getFirstChild().getTextContent();
+                    parkingSection.setId(id);
+                } else if (element.getTagName().equals("InfoItem")){
+                    if(element.getAttribute("name").equals("MaxHeight")) {
+                        String mHeight = getValue("value", element);
+                        double maxHeight = Double.parseDouble(mHeight);
+                        parkingSection.setMaxHeight(maxHeight);
+                    } else if (element.getAttribute("name").equals("MaxWidth")) {
+                        String mWidth = getValue("value", element);
+                        double maxWidth = Double.parseDouble(mWidth);
+                        parkingSection.setMaxWidth(maxWidth);
+                    } else if (element.getAttribute("name").equals("NumberOfSpots")) {
+                        String nSpots = getValue("value", element);
+                        int numberOfSpots = Integer.valueOf(nSpots);
+                        parkingSection.setNumberOfSpots(numberOfSpots);
+                    }
+                } else if (element.getTagName().equals("Object")) {
+                    if (element.getAttribute("type").equals("schema:GeoCoordinates")) {
+                        GeoCoordinates position = parseGeoCoordinates(element);
+                        parkingSection.setPosition(position);
+                    } else if (element.getAttribute("type").equals("schema:OpeningHoursSpecification")) {
+                        OpeningHours openingHours = parseOpeningHoursSpecification(element);
+                        parkingSection.setOpeningHours(openingHours);
+                    } else if (element.getAttribute("type").equals("list")) {
+                        parseParkingSectionList(element);
+                    }
+                }
+            }
+        }
+        return parkingSection;
     }
 
 
