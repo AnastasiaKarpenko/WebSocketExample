@@ -1,6 +1,6 @@
 package ru.kvs.websocketexample;
 
-public class Spot {
+public class ParkingSpot {
     private String id;
     private boolean isAvailable;
     private String user;

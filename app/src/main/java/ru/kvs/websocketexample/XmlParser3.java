@@ -17,11 +17,10 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 
-
 public class XmlParser3 {
     private ParkingService parkingService = new ParkingService();
 
-    public List parse(InputStream is) throws XmlPullParserException, IOException {
+    public ParkingService parse(InputStream is) throws XmlPullParserException, IOException {
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder = null;
 
@@ -38,7 +37,7 @@ public class XmlParser3 {
                 Node object = objects.item(0);
                 if (object.getNodeType() == Node.ELEMENT_NODE) {
                     Element objectElement = (Element) object;
-                    parseObjectsElement(objectElement);
+                    parkingService = parseObjectsElement(objectElement);
                 }
             }
 
@@ -47,22 +46,26 @@ public class XmlParser3 {
         }
 
 
-        return new ArrayList();
+        return parkingService;
     }
 
-    private void parseObjectsElement(Element element) {
+    private ParkingService parseObjectsElement(Element element) {
+        ParkingService pService = new ParkingService();
         NodeList objects = element.getChildNodes();
         for (int i = 0; i < objects.getLength(); i++) {
             Node object = objects.item(i);
 
             if (object.getNodeType() == Node.ELEMENT_NODE) {
                 Element objectElement = (Element) object;
-                parseObjectParkingService(objectElement);
+                pService = parseObjectParkingService(objectElement);
             }
         }
+        return pService;
     }
 
-    private void parseObjectParkingService(Element element) {
+    private ParkingService parseObjectParkingService(Element element) {
+        ParkingService parkingService = new ParkingService();
+
         NodeList objects = element.getChildNodes();
         for (int i = 0; i < objects.getLength(); i++) { // id, object(list)
             Node object = objects.item(i);
@@ -74,13 +77,16 @@ public class XmlParser3 {
                     String id = objectElement.getFirstChild().getNodeValue();
                     parkingService.setId(id);
                 } else {
-                    parseParkingServiceList(objectElement);
+                    List<ParkingLot> parkingLots = parseParkingServiceList(objectElement);
+                    parkingService.setParkingLots(parkingLots);
                 }
             }
         }
+        return parkingService;
     }
 
-    private void parseParkingServiceList(Element objectElement) {
+    private List<ParkingLot> parseParkingServiceList(Element objectElement) {
+        List<ParkingLot> parkingLots = new ArrayList<>();
         NodeList nodes = objectElement.getChildNodes();
 
         for (int i = 0; i < nodes.getLength(); i++) {
@@ -90,15 +96,16 @@ public class XmlParser3 {
                 Element nodeElement = (Element) node;
 
                 if (!nodeElement.getTagName().equals("id")) {
-                    parseParkingFacility(nodeElement);
+                    ParkingLot parkingLot = parseParkingFacility(nodeElement);
+                    parkingLots.add(parkingLot);
                 }
             }
         }
+        return parkingLots;
     }
 
-    private void parseParkingFacility(Element nodeElement) {
+    private ParkingLot parseParkingFacility(Element nodeElement) {
         ParkingLot parkingLot = new ParkingLot();
-        parkingService.addParkingLot(parkingLot);
 
         NodeList nodes = nodeElement.getChildNodes();
         for (int i = 0; i < nodes.getLength(); i++) { // id, object(list)
@@ -110,8 +117,8 @@ public class XmlParser3 {
                 if (element.getTagName().equals("id")) {
                     String id = element.getFirstChild().getTextContent();
                     parkingLot.setId(id);
-                } else if (element.getTagName().equals("InfoItem")){
-                    if(element.getAttribute("name").equals("MaxParkingHours")) {
+                } else if (element.getTagName().equals("InfoItem")) {
+                    if (element.getAttribute("name").equals("MaxParkingHours")) {
                         String maxParkingHours = getValue("value", element);
                         parkingLot.setMaxParkingHours(maxParkingHours);
                     } else if (element.getAttribute("name").equals("Owner")) {
@@ -131,6 +138,7 @@ public class XmlParser3 {
                 }
             }
         }
+        return parkingLot;
     }
 
 
@@ -148,11 +156,11 @@ public class XmlParser3 {
                 if (nodeElement.getTagName().equals("id")) {
                     continue;
                 } else if (nodeElement.getTagName().equals("InfoItem")) {
-                    if(nodeElement.getAttribute("name").equals("longitude")) {
+                    if (nodeElement.getAttribute("name").equals("longitude")) {
                         String lon = getValue("value", nodeElement);
                         double longitude = Double.parseDouble(lon);
                         position.setLongitude(longitude);
-                    } else if(nodeElement.getAttribute("name").equals("latitude")) {
+                    } else if (nodeElement.getAttribute("name").equals("latitude")) {
                         String lat = getValue("value", nodeElement);
                         double latitude = Double.parseDouble(lat);
                         position.setLatitude(latitude);
@@ -177,10 +185,10 @@ public class XmlParser3 {
                 if (nodeElement.getTagName().equals("id")) {
                     continue;
                 } else if (nodeElement.getTagName().equals("InfoItem")) {
-                    if(nodeElement.getAttribute("name").equals("closes")) {
+                    if (nodeElement.getAttribute("name").equals("closes")) {
                         String close = getValue("value", nodeElement);
                         openingHours.setClose(close);
-                    } else if(nodeElement.getAttribute("name").equals("opens")) {
+                    } else if (nodeElement.getAttribute("name").equals("opens")) {
                         String open = getValue("value", nodeElement);
                         openingHours.setOpen(open);
                     }
@@ -215,7 +223,7 @@ public class XmlParser3 {
 
 
         NodeList nodes = nodeElement.getChildNodes();
-        for (int i = 0; i < nodes.getLength(); i++) { u
+        for (int i = 0; i < nodes.getLength(); i++) {
             Node node = nodes.item(i);
 
             if (node.getNodeType() == Node.ELEMENT_NODE) {
@@ -224,8 +232,8 @@ public class XmlParser3 {
                 if (element.getTagName().equals("id")) {
                     String id = element.getFirstChild().getTextContent();
                     parkingSection.setId(id);
-                } else if (element.getTagName().equals("InfoItem")){
-                    if(element.getAttribute("name").equals("MaxHeight")) {
+                } else if (element.getTagName().equals("InfoItem")) {
+                    if (element.getAttribute("name").equals("MaxHeight")) {
                         String mHeight = getValue("value", element);
                         double maxHeight = Double.parseDouble(mHeight);
                         parkingSection.setMaxHeight(maxHeight);
@@ -237,21 +245,71 @@ public class XmlParser3 {
                         String nSpots = getValue("value", element);
                         int numberOfSpots = Integer.valueOf(nSpots);
                         parkingSection.setNumberOfSpots(numberOfSpots);
+                    } else if (element.getAttribute("name").equals("HourlyPrice")) {
+                        String price = getValue("value", element);
+                        double hourlyPrice = Double.parseDouble(price);
+                        parkingSection.setHourlyPrice(hourlyPrice);
+                    } else if (element.getAttribute("name").equals("NumberOfSpotsAvailable")) {
+                        String nSpotsAvailable = getValue("value", element);
+                        int numberOfSpotsAvailable = Integer.valueOf(nSpotsAvailable);
+                        parkingSection.setNumberOfSpotsAvailable(numberOfSpotsAvailable);
                     }
                 } else if (element.getTagName().equals("Object")) {
-                    if (element.getAttribute("type").equals("schema:GeoCoordinates")) {
-                        GeoCoordinates position = parseGeoCoordinates(element);
-                        parkingSection.setPosition(position);
-                    } else if (element.getAttribute("type").equals("schema:OpeningHoursSpecification")) {
-                        OpeningHours openingHours = parseOpeningHoursSpecification(element);
-                        parkingSection.setOpeningHours(openingHours);
-                    } else if (element.getAttribute("type").equals("list")) {
-                        parseParkingSectionList(element);
+                    if (element.getAttribute("type").equals("list")) {
+                        List<ParkingSpot> parkingSpots = parseParkingSpotsList(element);
+                        parkingSection.setParkingSpots(parkingSpots);
                     }
                 }
             }
         }
         return parkingSection;
+    }
+
+    private List<ParkingSpot> parseParkingSpotsList(Element objectElement) {
+        List<ParkingSpot> parkingSpots = new ArrayList<>();
+        NodeList nodes = objectElement.getChildNodes();
+
+        for (int i = 0; i < nodes.getLength(); i++) {
+            Node node = nodes.item(i);
+
+            if (node.getNodeType() == Node.ELEMENT_NODE) {
+                Element nodeElement = (Element) node;
+
+                if (!nodeElement.getTagName().equals("id")) {
+                    ParkingSpot parkingSpot = parseParkingSpot(nodeElement);
+                    parkingSpots.add(parkingSpot);
+                }
+            }
+        }
+        return parkingSpots;
+    }
+
+    private ParkingSpot parseParkingSpot(Element nodeElement) {
+        ParkingSpot parkingSpot = new ParkingSpot();
+
+        NodeList nodes = nodeElement.getChildNodes();
+        for (int i = 0; i < nodes.getLength(); i++) {
+            Node node = nodes.item(i);
+
+            if (node.getNodeType() == Node.ELEMENT_NODE) {
+                Element element = (Element) node;
+
+                if (element.getTagName().equals("id")) {
+                    String id = element.getFirstChild().getTextContent();
+                    parkingSpot.setId(id);
+                } else if (element.getTagName().equals("InfoItem")) {
+                    if (element.getAttribute("name").equals("Available")) {
+                        String available = getValue("value", element).toLowerCase();
+                        boolean isAvailable = Boolean.valueOf(available);
+                        parkingSpot.setAvailable(isAvailable);
+                    } else if (element.getAttribute("name").equals("User")) {
+                        String user = getValue("value", element);
+                        parkingSpot.setUser(user);
+                    }
+                }
+            }
+        }
+        return parkingSpot;
     }
 
 
@@ -260,7 +318,6 @@ public class XmlParser3 {
         Node node = nodeList.item(0);
         return node.getNodeValue();
     }
-
 
 
 }

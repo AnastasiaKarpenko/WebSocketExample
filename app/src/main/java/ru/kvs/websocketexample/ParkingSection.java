@@ -9,7 +9,7 @@ public class ParkingSection {
     private int numberOfSpots;
     private int numberOfSpotsAvailable;
     private double hourlyPrice;
-    private List<Spot> mSpots;
+    private List<ParkingSpot> mParkingSpots;
 
     public double getMaxHeight() {
         return maxHeight;
@@ -51,16 +51,16 @@ public class ParkingSection {
         this.hourlyPrice = hourlyPrice;
     }
 
-    public List<Spot> getSpots() {
-        return mSpots;
+    public List<ParkingSpot> getParkingSpots() {
+        return mParkingSpots;
     }
 
-    public void setSpots(List<Spot> spots) {
-        this.mSpots = spots;
+    public void setParkingSpots(List<ParkingSpot> parkingSpots) {
+        this.mParkingSpots = parkingSpots;
     }
 
-    public void addSpot(Spot spot) {
-        mSpots.add(spot);
+    public void addSpot(ParkingSpot parkingSpot) {
+        mParkingSpots.add(parkingSpot);
     }
 
     public String getId() {
